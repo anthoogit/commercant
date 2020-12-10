@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Commercant</string>
+    <string name="firstName">First Name</string>
+    <string name="name">Name</string>
+    <string name="client_point">__ points</string>
+    <string name="offers">Offres disponibles</string>
+    <string name="offer_title">Une vienoiserie offerte !</string>
+    <string name="offer_point">70 points</string>
+</resources>
