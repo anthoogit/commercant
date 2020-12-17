@@ -6,4 +6,7 @@
     <string name="offers">Offres disponibles</string>
     <string name="offer_title">Une vienoiserie offerte !</string>
     <string name="offer_point">70 points</string>
+    <string name="button_validate_offer">Valider</string>
+    <string name="solde_actuel">Solde actuel :</string>
+    <string name="nouveau_solde">Nouveau solde :</string>
 </resources>

@@ -9,7 +9,7 @@ public class ClientDatabase {
     public Client getClient(int id) throws Exception {
         for (Client c : clientList) {
             System.out.println("idclient = " + c.getId());
-            if(c.getId() == id){
+            if (c.getId() == id) {
                 int index = clientList.indexOf(c);
                 return clientList.get(index);
             }
@@ -18,6 +18,21 @@ public class ClientDatabase {
     }
 
     public void insertClient(Client client) {
+        try {
+            if (getClient(client.getId()) != null) {
+                System.out.println("Le client existe déjà");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.clientList.add(client);
+    }
+
+    public int getClientDbSize() {
+        return clientList.size();
+    }
+
+    public List<Client> getClientList() {
+        return clientList;
     }
 }

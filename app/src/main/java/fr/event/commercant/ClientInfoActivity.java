@@ -1,25 +1,43 @@
 package fr.event.commercant;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.os.PersistableBundle;
 import android.widget.TextView;
 
 public class ClientInfoActivity extends AppCompatActivity {
+    public static final String CLIENT_ID = "fr.event.ommercant.CLIENT_ID";
+    public static int id_client_temp = 0;
+    int id_client;
+    Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_info);
+        Intent intent;
+        if (getIntent() != null) {
+            intent = getIntent();
+            id_client = intent.getIntExtra(CLIENT_ID, 0);
+        } else {
+            id_client = id_client_temp;
+        }
+        id_client_temp = id_client;
 
-        //Get the Intent that started this activity and extract the string
-        Intent intent = getIntent();
-        String firstname = intent.getStringExtra("CLIENT_FIRSNAME");
-        String name = intent.getStringExtra("CLIENT_NAME");
-        int points = intent.getIntExtra("CLIENT_POINTS", 0);
+        try {
+            client = MainActivity.clientdb.getClient(id_client);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String firstname = client.getFirstName();
+        String name = client.getName();
+        int points = client.getPoints();
 
         // Capture the layout's TextView and set the string as tis text
         TextView textView_firstname = findViewById(R.id.firstName);
@@ -31,11 +49,10 @@ public class ClientInfoActivity extends AppCompatActivity {
         TextView textView_points = findViewById(R.id.client_point);
         textView_points.setText(points + " points");
 
-        ListView listView = findViewById(R.id.listView);
-        OfferAdapter adapter = new OfferAdapter(this, MainActivity.offerdb.getAllOffers());
-        listView.setAdapter(adapter);
-//        ArrayAdapter<Offer> arrayAdapter = new ArrayAdapter<Offer>(this, R.layout.offer_item, MainActivity.offerdb.getAllOffers());
-//        ArrayAdapter<Offer> arrayAdapter = new ArrayAdapter<Offer>(this, android.R.layout.simple_list_item_1, MainActivity.offerdb.getAllOffers());
-//        listView.setAdapter(arrayAdapter);
+        RecyclerView recyclerView = findViewById(R.id.listoffers);
+        recyclerView.setAdapter(new OfferAdapter(this, MainActivity.offerdb.getAllOffers(), client));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
+
 }

@@ -10,7 +10,7 @@ public class OfferDatabase {
         return offerList.get(id);
     }
 
-    public List<Offer> getAllOffers(){
+    public List<Offer> getAllOffers() {
         return offerList;
     }
 

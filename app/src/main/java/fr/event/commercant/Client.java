@@ -6,7 +6,7 @@ public class Client {
     private String firstName;
     private int points;
 
-    public Client(int id, String name, String firstName) {
+    public Client(int id, String firstName, String name) {
         this.id = id;
         this.name = name;
         this.firstName = firstName;
