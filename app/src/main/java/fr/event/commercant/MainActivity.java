@@ -1,18 +1,16 @@
 package fr.event.commercant;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import android.Manifest;
-import android.app.Application;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
@@ -21,8 +19,6 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ErrorCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
-
-import java.sql.SQLSyntaxErrorException;
 
 public class MainActivity extends AppCompatActivity {
     private CodeScanner mCodeScanner;
@@ -35,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
 
-        checkCameraPermission();
+        checkCameraPermission(); // Demande la permission de la caméra
 
-        //data
+        //data (base de données de test)
         if (clientdb.getClientDbSize() == 0) { // Pour ne les mettre qu'une seule fois
             System.out.println("Data added");
             clientdb.insertClient(new Client(72, "Anthony", "Pauthonnier", 132));
@@ -63,15 +59,17 @@ public class MainActivity extends AppCompatActivity {
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull Result result) {
-                int id_client = Integer.parseInt(result.getText());
+                int id_client = Integer.parseInt(result.getText()); // lit la valeur du qr code
                 System.out.println(id_client);
 
                 try {
-                    Client c = clientdb.getClient(id_client);
+                    Client c = clientdb.getClient(id_client); // récupère le client s'il existe dans la base de données
+
+                    // Génère une nouvelle activité ClientInfo avec l'id du client
                     Intent intent = new Intent(getApplicationContext(), ClientInfoActivity.class);
                     intent.putExtra(ClientInfoActivity.CLIENT_ID, c.getId());
                     startActivity(intent);
-                } catch (Exception e) {
+                } catch (Exception e) { // affiche que le client n'a pas été trouvé s'il n'est pas dans la base
                     System.out.println("Id client non trouvé");
                     runOnUiThread(new Runnable() {
                         @Override
@@ -115,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    // Permission camera
     private void checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 100);

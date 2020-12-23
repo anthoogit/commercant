@@ -1,14 +1,12 @@
 package fr.event.commercant;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.widget.TextView;
 
 public class ClientInfoActivity extends AppCompatActivity {
     public static final String CLIENT_ID = "fr.event.ommercant.CLIENT_ID";
@@ -21,6 +19,7 @@ public class ClientInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_info);
         Intent intent;
+
         if (getIntent() != null) {
             intent = getIntent();
             id_client = intent.getIntExtra(CLIENT_ID, 0);
@@ -29,15 +28,16 @@ public class ClientInfoActivity extends AppCompatActivity {
         }
         id_client_temp = id_client;
 
+        // Récupère le client avec son id
         try {
             client = MainActivity.clientdb.getClient(id_client);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        String firstname = client.getFirstName();
-        String name = client.getName();
-        int points = client.getPoints();
+        String firstname = client.getFirstName(); // Prénom
+        String name = client.getName(); // Nom
+        int points = client.getPoints(); // Points
 
         // Capture the layout's TextView and set the string as tis text
         TextView textView_firstname = findViewById(R.id.firstName);
@@ -49,6 +49,7 @@ public class ClientInfoActivity extends AppCompatActivity {
         TextView textView_points = findViewById(R.id.client_point);
         textView_points.setText(points + " points");
 
+        // Affiche les liste des offres
         RecyclerView recyclerView = findViewById(R.id.listoffers);
         recyclerView.setAdapter(new OfferAdapter(this, MainActivity.offerdb.getAllOffers(), client));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

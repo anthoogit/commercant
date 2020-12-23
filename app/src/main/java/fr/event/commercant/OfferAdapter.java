@@ -2,7 +2,6 @@ package fr.event.commercant;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+// Cette classe est utilisée par le recyclerView pour afficher la liste des offres
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> {
     private List<Offer> offers;
     private Context context;
